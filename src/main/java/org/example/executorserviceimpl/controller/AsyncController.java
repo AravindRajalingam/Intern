@@ -29,5 +29,10 @@ public class AsyncController {
 
     public void newMethod(){
         System.out.println("New method");
+        int i=0;
+        while(i<10){
+            System.out.println("Loop "+i);
+            i++;
+        }
     }
 }
