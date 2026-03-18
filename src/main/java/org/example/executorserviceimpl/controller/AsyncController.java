@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -18,12 +20,15 @@ public class AsyncController {
     @GetMapping("/async")
     public ResponseEntity<?> asyncMethod() throws InterruptedException {
         CompletableFuture<String> data=asyncService.asyncMethod();
-        method();
+        List<Integer> num=new ArrayList<>();
+        method(num);
+        System.out.println(num);
         newMethod();
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
-    public void method(){
+    public void method(List<Integer> num){
+        num.add(1);
         System.out.println("After async method");
     }
 
