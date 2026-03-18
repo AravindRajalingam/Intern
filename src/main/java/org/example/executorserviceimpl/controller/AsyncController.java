@@ -27,4 +27,7 @@ public class AsyncController {
         System.out.println("After async method");
     }
 
+    public void newMethod(){
+        System.out.println("New method");
+    }
 }
