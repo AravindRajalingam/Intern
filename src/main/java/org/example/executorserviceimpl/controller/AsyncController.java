@@ -20,6 +20,7 @@ public class AsyncController {
     public ResponseEntity<?> asyncMethod() throws InterruptedException {
         CompletableFuture<String> data=asyncService.asyncMethod();
         method();
+        newMethod();
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
