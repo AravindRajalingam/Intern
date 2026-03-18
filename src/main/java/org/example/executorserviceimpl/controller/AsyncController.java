@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 public class AsyncController {
@@ -20,6 +19,7 @@ public class AsyncController {
     public ResponseEntity<?> asyncMethod() throws InterruptedException {
         CompletableFuture<String> data=asyncService.asyncMethod();
         method();
+        newMethod();
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
@@ -27,4 +27,7 @@ public class AsyncController {
         System.out.println("After async method");
     }
 
+    public void newMethod(){
+        System.out.println("New method");
+    }
 }
