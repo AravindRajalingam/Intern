@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Appointments</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body { background:#eef0f3; padding:24px; }
+  .card { max-width:1180px; margin:0 auto; background:#fff; border-radius:14px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+
+  .header {
+    display:flex; align-items:center; gap:14px; padding:24px 26px 16px;
+  }
+  .header .icon {
+    width:44px; height:44px; border-radius:50%; background:#eaf0fe;
+    display:flex; align-items:center; justify-content:center; font-size:18px; color:#1550c4;
+  }
+  .header h2 { font-size:19px; color:#111; }
+  .header p { font-size:13px; color:#888; margin-top:2px; }
+
+  /* Tabs */
+  .tabs { display:flex; border-bottom:1px solid #eee; padding:0 26px; }
+  .tab {
+    padding:14px 22px; font-size:14px; font-weight:600; color:#888; cursor:pointer;
+    display:flex; align-items:center; gap:8px; position:relative;
+  }
+  .tab.active { color:#1550c4; }
+  .tab.active::after {
+    content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px;
+    background:#1550c4; border-radius:2px;
+  }
+  .tab .ico { font-size:14px; }
+
+  /* Appointment List */
+  .list { padding:10px 26px 26px; }
+  .appt-row {
+    display:flex; align-items:center; gap:18px; padding:18px 0;
+    border-bottom:1px solid #f0f0f0;
+  }
+  .appt-row:last-child { border-bottom:none; }
+
+  .appt-row img {
+    width:90px; height:66px; border-radius:8px; object-fit:cover;
+    background:linear-gradient(135deg,#cfe0f0,#a9c7e0);
+    flex-shrink:0;
+  }
+
+  .appt-info { flex:1.4; }
+  .appt-info h3 { font-size:15px; color:#111; margin-bottom:4px; }
+  .appt-info .doc { color:#1550c4; font-size:13.5px; font-weight:600; margin-bottom:2px; }
+  .appt-info .spec { font-size:12.5px; color:#777; }
+
+  .appt-datetime { flex:1.4; }
+  .appt-datetime .row { display:flex; align-items:center; gap:8px; font-size:13px; color:#333; margin-bottom:4px; }
+  .appt-datetime .row .ico { color:#1550c4; font-size:13px; }
+  .appt-datetime .sub { font-size:12px; color:#888; margin-left:21px; margin-bottom:4px; }
+
+  .status {
+    padding:6px 16px; border-radius:20px; font-size:12.5px; font-weight:600;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .status.completed { background:#eaf7ec; color:#2e7d32; }
+  .status.upcoming { background:#eaf0fe; color:#1550c4; border:1px solid #c8d8fb; }
+  .status.cancelled { background:#fdecea; color:#c62828; border:1px solid #f6c9c4; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <div class="icon">📅</div>
+    <div>
+      <h2>My Appointments</h2>
+      <p>View and manage your appointments</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active"><span class="ico">📅</span> History</div>
+    <div class="tab"><span class="ico">📅</span> Upcoming</div>
+    <div class="tab"><span class="ico">✕</span> Cancelled</div>
+  </div>
+
+  <div class="list">
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>City Care Hospital</h3>
+        <div class="doc">Dr. Rajesh Kumar</div>
+        <div class="spec">Cardiologist</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 05 May 2025</div>
+        <div class="sub">Monday</div>
+        <div class="row"><span class="ico">🕐</span> 10:30 AM</div>
+      </div>
+      <div class="status completed">✔ Completed</div>
+    </div>
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>Green Valley Hospital</h3>
+        <div class="doc">Dr. Meena S</div>
+        <div class="spec">Neurologist</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 15 Apr 2025</div>
+        <div class="sub">Tuesday</div>
+        <div class="row"><span class="ico">🕐</span> 11:00 AM</div>
+      </div>
+      <div class="status completed">✔ Completed</div>
+    </div>
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>Life Line Multispeciality</h3>
+        <div class="doc">Dr. Priya Sharma</div>
+        <div class="spec">Pulmonologist</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 02 Apr 2025</div>
+        <div class="sub">Wednesday</div>
+        <div class="row"><span class="ico">🕐</span> 04:30 PM</div>
+      </div>
+      <div class="status completed">✔ Completed</div>
+    </div>
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>City Care Hospital</h3>
+        <div class="doc">Dr. Rajesh Kumar</div>
+        <div class="spec">Cardiologist</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 20 May 2025</div>
+        <div class="sub">Tuesday</div>
+        <div class="row"><span class="ico">🕐</span> 09:00 AM</div>
+      </div>
+      <div class="status upcoming">🕐 Upcoming</div>
+    </div>
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>Hope Medical Center</h3>
+        <div class="doc">Dr. Arvind B</div>
+        <div class="spec">Orthopedic Surgeon</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 28 May 2025</div>
+        <div class="sub">Wednesday</div>
+        <div class="row"><span class="ico">🕐</span> 02:00 PM</div>
+      </div>
+      <div class="status upcoming">🕐 Upcoming</div>
+    </div>
+
+    <div class="appt-row">
+      <img src="" alt="hospital">
+      <div class="appt-info">
+        <h3>City Care Hospital</h3>
+        <div class="doc">Dr. Priya Sharma</div>
+        <div class="spec">Pulmonologist</div>
+      </div>
+      <div class="appt-datetime">
+        <div class="row"><span class="ico">📅</span> 10 May 2025</div>
+        <div class="sub">Saturday</div>
+        <div class="row"><span class="ico">🕐</span> 03:00 PM</div>
+      </div>
+      <div class="status cancelled">✕ Cancelled</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
