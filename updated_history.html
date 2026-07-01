@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Curonex | My Appointments</title>
+<style>
+  :root{
+    --primary-dark:#0a3fc4;
+    --primary:#1550c4;
+    --primary-light:#eaf0fe;
+    --bg:#eef1f9;
+    --text-dark:#111827;
+    --text-muted:#7c8494;
+    --border:#e7eaf3;
+    --green:#2e7d32;
+    --green-bg:#eaf7ec;
+    --red:#c62828;
+    --red-bg:#fdecea;
+    --star-bg:#eaf0fe;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body { background:var(--bg); }
+
+  /* ===== NAVBAR ===== */
+  .navbar{
+    background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+    color:#fff; padding:14px 30px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:100;
+  }
+  .navbar .brand{ display:flex; align-items:center; gap:12px; }
+  .navbar .brand .logo{
+    width:38px; height:38px; background:rgba(255,255,255,0.15); border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .navbar .brand h1{ font-size:19px; font-weight:700; }
+  .navbar .brand p{ font-size:11px; color:rgba(255,255,255,0.8); margin-top:1px; }
+
+  .navbar .nav-right{ display:flex; align-items:center; gap:28px; }
+  .navbar .nav-links{ display:flex; gap:26px; }
+  .navbar .nav-links a{ color:#fff; text-decoration:none; font-size:14px; font-weight:500; opacity:0.92; }
+  .navbar .nav-links a:hover{ opacity:1; }
+
+  .navbar .icon-btn{
+    position:relative; width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center;
+    font-size:15px; cursor:pointer;
+  }
+  .navbar .icon-btn .badge{
+    position:absolute; top:-4px; right:-4px; background:#ff4757; color:#fff;
+    font-size:10px; font-weight:700; width:16px; height:16px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .navbar .user{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .navbar .user .avatar{
+    width:34px; height:34px; border-radius:50%; background:#fff; color:var(--primary);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;
+  }
+  .navbar .user span{ font-size:13.5px; font-weight:600; }
+
+  /* ===== LAYOUT ===== */
+  .layout{
+    display:grid; grid-template-columns:230px 1fr 260px; gap:20px;
+    padding:24px 30px; align-items:start;
+  }
+
+  /* ===== LEFT SIDEBAR ===== */
+  .sidebar{ display:flex; flex-direction:column; gap:14px; }
+  .side-nav{
+    background:#fff; border-radius:14px; padding:14px; box-shadow:0 1px 4px rgba(20,30,60,0.05);
+  }
+  .side-item{
+    display:flex; align-items:center; gap:12px; padding:12px 12px;
+    border-radius:10px; cursor:pointer; margin-bottom:4px; color:var(--text-dark);
+  }
+  .side-item .ico{
+    width:34px; height:34px; border-radius:9px; background:#f1f3f9;
+    display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--primary);
+    flex-shrink:0;
+  }
+  .side-item span{ font-size:13.5px; font-weight:600; line-height:1.3; }
+  .side-item:hover{ background:#f5f7fd; }
+  .side-item.active{ background:var(--primary-light); }
+  .side-item.active .ico{ background:var(--primary); color:#fff; }
+  .side-item.active span{ color:var(--primary); }
+
+  .help-card{
+    background:linear-gradient(160deg,#eaf0fe,#f7f9fe);
+    border-radius:14px; padding:18px; position:relative; overflow:hidden;
+  }
+  .help-card .ico{
+    width:38px; height:38px; border-radius:50%; background:#fff; color:var(--primary);
+    display:flex; align-items:center; justify-content:center; font-size:16px; margin-bottom:10px;
+  }
+  .help-card h4{ font-size:14px; color:var(--text-dark); margin-bottom:4px; }
+  .help-card .link{ color:var(--primary); font-size:13px; font-weight:700; margin-bottom:8px; display:block; }
+  .help-card p{ font-size:12px; color:var(--text-muted); }
+
+  /* ===== MAIN CONTENT (My Appointments) ===== */
+  .main-card{
+    background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(20,30,60,0.06);
+    padding:26px 30px;
+  }
+
+  .content-header{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:22px; gap:20px; flex-wrap:wrap;
+  }
+  .titles{ display:flex; align-items:center; gap:14px; }
+  .titles .icon{
+    width:44px; height:44px; border-radius:12px; background:var(--primary-light);
+    display:flex; align-items:center; justify-content:center; font-size:19px; color:var(--primary);
+    flex-shrink:0;
+  }
+  .titles h2{ font-size:20px; color:var(--text-dark); }
+  .titles p{ font-size:13px; color:var(--text-muted); margin-top:3px; }
+
+  .tab-header{
+    display:flex; gap:6px; background:#f3f4f7; padding:5px; border-radius:10px; flex-shrink:0;
+  }
+  .tab-btn{
+    display:flex; align-items:center; gap:7px; padding:9px 16px;
+    border-radius:8px; font-size:13.5px; font-weight:600; color:#777;
+    cursor:pointer; white-space:nowrap; transition:background 0.15s, color 0.15s;
+    border:none; background:transparent;
+  }
+  .tab-btn .ico{ font-size:13px; }
+  .tab-btn .count{
+    font-size:11px; font-weight:700; background:#e2e4ea; color:#888;
+    padding:1px 7px; border-radius:10px;
+  }
+  .tab-btn:hover{ color:var(--primary); }
+  .tab-btn.active{ background:var(--primary); color:#fff; }
+  .tab-btn.active .count{ background:rgba(255,255,255,0.22); color:#fff; }
+
+  .list{ display:flex; flex-direction:column; }
+  .appt-row{
+    display:flex; align-items:center; gap:18px; padding:18px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .appt-row:last-child{ border-bottom:none; }
+  .appt-row img{
+    width:90px; height:66px; border-radius:8px; object-fit:cover;
+    background:linear-gradient(135deg,#cfe0f0,#a9c7e0);
+    flex-shrink:0;
+  }
+  .appt-info{ flex:1.4; }
+  .appt-info h3{ font-size:15px; color:var(--text-dark); margin-bottom:4px; }
+  .appt-info .doc{ color:var(--primary); font-size:13.5px; font-weight:600; margin-bottom:2px; }
+  .appt-info .spec{ font-size:12.5px; color:var(--text-muted); }
+
+  .appt-datetime{ flex:1.4; }
+  .appt-datetime .row{ display:flex; align-items:center; gap:8px; font-size:13px; color:#333; margin-bottom:4px; }
+  .appt-datetime .row .ico{ color:var(--primary); font-size:13px; }
+  .appt-datetime .sub{ font-size:12px; color:var(--text-muted); margin-left:21px; margin-bottom:4px; }
+
+  .status{
+    padding:6px 16px; border-radius:20px; font-size:12.5px; font-weight:600;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .status.completed{ background:var(--green-bg); color:var(--green); }
+  .status.upcoming{ background:var(--primary-light); color:var(--primary); border:1px solid #c8d8fb; }
+  .status.cancelled{ background:var(--red-bg); color:var(--red); border:1px solid #f6c9c4; }
+
+  .empty-state{ text-align:center; padding:60px 20px; color:#999; }
+  .empty-state .ico{ font-size:34px; margin-bottom:12px; }
+  .empty-state p{ font-size:14px; }
+
+  /* ===== RIGHT SIDEBAR ===== */
+  .right-sidebar{ display:flex; flex-direction:column; gap:14px; }
+  .quick-card{
+    background:#fff; border-radius:14px; padding:16px; display:flex; align-items:center; gap:14px;
+    box-shadow:0 1px 4px rgba(20,30,60,0.05); cursor:pointer; border:2px solid transparent;
+    transition:border-color 0.15s;
+  }
+  .quick-card:hover{ border-color:var(--primary-light); }
+  .quick-card.active-quick{ border-color:var(--primary); }
+  .quick-card .ico{
+    width:42px; height:42px; border-radius:50%; background:var(--primary-light); color:var(--primary);
+    display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;
+  }
+  .quick-card h4{ font-size:14px; color:var(--text-dark); margin-bottom:2px; display:flex; align-items:center; gap:6px; }
+  .quick-card p{ font-size:12px; color:var(--text-muted); }
+  .quick-card .arrow{ margin-left:auto; color:var(--text-muted); }
+
+  @media (max-width:1100px){
+    .layout{ grid-template-columns:1fr; }
+    .navbar .nav-links{ display:none; }
+  }
+  @media (max-width:700px){
+    .content-header{ flex-direction:column; }
+    .tab-header{ width:100%; }
+    .tab-btn{ flex:1; justify-content:center; }
+    .appt-row{ flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+  <div class="brand">
+    <div class="logo">💙</div>
+    <div>
+      <h1>Curonex</h1>
+      <p>Affordable Healthcare Access</p>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="icon-btn">🔔<span class="badge">2</span></div>
+    <div class="user">
+      <div class="avatar">K</div>
+      <span>Kaushik T</span>
+      <span style="font-size:11px;">▾</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LAYOUT ===== -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+    <div class="side-nav">
+      <div class="side-item">
+        <div class="ico">📅</div>
+        <span>Appointment Scheduling</span>
+      </div>
+      <div class="side-item">
+        <div class="ico">💊</div>
+        <span>Pharmacy</span>
+      </div>
+      <div class="side-item">
+        <div class="ico">🚑</div>
+        <span>Emergency Service</span>
+      </div>
+      <div class="side-item">
+        <div class="ico">🏥</div>
+        <span>Critical Resource Service</span>
+      </div>
+      <div class="side-item active">
+        <div class="ico">📋</div>
+        <span>My Appointments</span>
+      </div>
+      <div class="side-item">
+        <div class="ico">⛺</div>
+        <span>Medical Camp</span>
+      </div>
+    </div>
+
+    <div class="help-card">
+      <div class="ico">🎧</div>
+      <h4>Need Help?</h4>
+      <a class="link" href="#">Support Center</a>
+      <p>We are here to help you 24/7</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT: My Appointments -->
+  <div class="main-card">
+
+    <div class="content-header">
+      <div class="titles">
+        <div class="icon">📅</div>
+        <div>
+          <h2 id="section-title">Upcoming Appointments</h2>
+          <p id="section-sub">Appointments you have scheduled ahead</p>
+        </div>
+      </div>
+
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="upcoming">
+          <span class="ico">📅</span> Upcoming <span class="count" id="count-upcoming">0</span>
+        </button>
+        <button class="tab-btn" data-tab="history">
+          <span class="ico">🕘</span> History <span class="count" id="count-history">0</span>
+        </button>
+        <button class="tab-btn" data-tab="cancelled">
+          <span class="ico">✕</span> Cancelled <span class="count" id="count-cancelled">0</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="list" id="appt-list"></div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+    <div class="quick-card" data-quick="history">
+      <div class="ico">🕘</div>
+      <div>
+        <h4>History</h4>
+        <p>View your past appointments</p>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="quick-card active-quick" data-quick="upcoming">
+      <div class="ico">📅</div>
+      <div>
+        <h4>Upcoming</h4>
+        <p>View your upcoming appointments</p>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="quick-card" data-quick="cancelled">
+      <div class="ico">✕</div>
+      <div>
+        <h4>Cancelled</h4>
+        <p>View cancelled appointments</p>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const appointments = [
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Rajesh Kumar", spec: "Cardiologist",
+      date: "20 May 2025", day: "Tuesday", time: "09:00 AM", status: "upcoming"
+    },
+    {
+      hospital: "Hope Medical Center", doctor: "Dr. Arvind B", spec: "Orthopedic Surgeon",
+      date: "28 May 2025", day: "Wednesday", time: "02:00 PM", status: "upcoming"
+    },
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Rajesh Kumar", spec: "Cardiologist",
+      date: "05 May 2025", day: "Monday", time: "10:30 AM", status: "history"
+    },
+    {
+      hospital: "Green Valley Hospital", doctor: "Dr. Meena S", spec: "Neurologist",
+      date: "15 Apr 2025", day: "Tuesday", time: "11:00 AM", status: "history"
+    },
+    {
+      hospital: "Life Line Multispeciality", doctor: "Dr. Priya Sharma", spec: "Pulmonologist",
+      date: "02 Apr 2025", day: "Wednesday", time: "04:30 PM", status: "history"
+    },
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Priya Sharma", spec: "Pulmonologist",
+      date: "10 May 2025", day: "Saturday", time: "03:00 PM", status: "cancelled"
+    }
+  ];
+
+  const statusMeta = {
+    upcoming:  { label: "Upcoming",  icon: "🕐", class: "upcoming" },
+    history:   { label: "Completed", icon: "✔",  class: "completed" },
+    cancelled: { label: "Cancelled", icon: "✕",  class: "cancelled" }
+  };
+
+  const sectionMeta = {
+    upcoming:  { title: "Upcoming Appointments", sub: "Appointments you have scheduled ahead" },
+    history:   { title: "Appointment History",   sub: "Your past completed appointments" },
+    cancelled: { title: "Cancelled Appointments",sub: "Appointments that were cancelled" }
+  };
+
+  function renderList(tab) {
+    const list = document.getElementById('appt-list');
+    const items = appointments.filter(a => a.status === tab);
+
+    document.getElementById('section-title').textContent = sectionMeta[tab].title;
+    document.getElementById('section-sub').textContent = sectionMeta[tab].sub;
+
+    if (items.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="ico">📭</div>
+          <p>No ${tab} appointments to show.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(a => {
+      const s = statusMeta[a.status];
+      return `
+        <div class="appt-row">
+          <img src="" alt="hospital">
+          <div class="appt-info">
+            <h3>${a.hospital}</h3>
+            <div class="doc">${a.doctor}</div>
+            <div class="spec">${a.spec}</div>
+          </div>
+          <div class="appt-datetime">
+            <div class="row"><span class="ico">📅</span> ${a.date}</div>
+            <div class="sub">${a.day}</div>
+            <div class="row"><span class="ico">🕐</span> ${a.time}</div>
+          </div>
+          <div class="status ${s.class}">${s.icon} ${s.label}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function updateCounts() {
+    ['upcoming','history','cancelled'].forEach(tab => {
+      const n = appointments.filter(a => a.status === tab).length;
+      document.getElementById('count-' + tab).textContent = n;
+    });
+  }
+
+  function setActiveTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(i => i.classList.toggle('active', i.dataset.tab === tab));
+    document.querySelectorAll('.quick-card').forEach(i => i.classList.toggle('active-quick', i.dataset.quick === tab));
+    renderList(tab);
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(item => {
+    item.addEventListener('click', () => setActiveTab(item.dataset.tab));
+  });
+
+  document.querySelectorAll('.quick-card').forEach(item => {
+    item.addEventListener('click', () => setActiveTab(item.dataset.quick));
+  });
+
+  // Initial load: Upcoming shown first
+  updateCounts();
+  setActiveTab('upcoming');
+</script>
+
+</body>
+</html>
