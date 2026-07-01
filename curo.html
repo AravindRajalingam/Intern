@@ -1,0 +1,331 @@
+Here's the complete HTML/CSS code for the AmbuCare interface:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AmbuCare</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+  body { background:#f4f5f7; padding:24px; }
+  .container { max-width:1100px; margin:0 auto; }
+
+  /* Header */
+  .header {
+    background:#fff; border-radius:14px; padding:18px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .brand { display:flex; align-items:center; gap:14px; }
+  .brand .icon { font-size:30px; }
+  .brand h1 { font-size:22px; color:#111; }
+  .brand h1 span { color:#e02020; }
+  .brand p { font-size:13px; color:#888; margin-top:2px; }
+
+  .location-box { display:flex; align-items:center; gap:16px; }
+  .location-info { display:flex; align-items:center; gap:8px; }
+  .location-info .pin {
+    width:34px; height:34px; background:#e02020; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:#fff;
+  }
+  .location-text strong { display:block; font-size:14px; color:#c62828; }
+  .location-text span { font-size:12px; color:#888; }
+
+  .btn-red {
+    background:#e02020; color:#fff; border:none; border-radius:8px;
+    padding:10px 16px; font-size:14px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  /* Symptom Search Card */
+  .search-card {
+    background:#fff; border-radius:14px; padding:24px;
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .search-left { flex:1; }
+  .search-left h2 { font-size:20px; color:#111; margin-bottom:4px; }
+  .search-left p { font-size:13px; color:#888; margin-bottom:16px; }
+
+  .search-bar { display:flex; gap:10px; max-width:520px; }
+  .search-bar input {
+    flex:1; padding:12px 14px; border:1px solid #ddd; border-radius:8px;
+    font-size:14px; outline:none;
+  }
+  .search-bar button {
+    background:#e02020; color:#fff; border:none; border-radius:8px;
+    padding:12px 22px; font-size:14px; font-weight:600; cursor:pointer;
+  }
+
+  .popular { margin-top:16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .popular span.label { font-size:13px; font-weight:600; color:#333; }
+  .tag {
+    background:#f2f2f2; border-radius:20px; padding:6px 14px;
+    font-size:12.5px; color:#333; cursor:pointer;
+  }
+
+  .search-illustration { width:220px; text-align:center; font-size:60px; }
+
+  /* Hospitals Section */
+  .section-title {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;
+  }
+  .section-title h2 { font-size:19px; display:flex; align-items:center; gap:8px; }
+  .section-title .based-on { font-size:13px; color:#555; }
+  .section-title .based-on b { color:#e02020; }
+  .section-sub { font-size:13px; color:#888; margin-bottom:16px; }
+
+  .hospital-card {
+    background:#fff; border-radius:14px; padding:20px;
+    display:grid; grid-template-columns: 110px 1.4fr 1.2fr 1.3fr 1fr;
+    gap:20px; align-items:center; margin-bottom:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .hosp-img {
+    width:100px; height:80px; border-radius:10px;
+    background:linear-gradient(135deg,#cfe0f0,#a9c7e0);
+  }
+
+  .hosp-info h3 { font-size:16px; color:#111; margin-bottom:6px; }
+  .hosp-info .dist {
+    background:#e8f5e9; color:#2e7d32; font-size:11px; font-weight:600;
+    padding:2px 8px; border-radius:10px; margin-left:8px;
+  }
+  .hosp-info .addr { font-size:12.5px; color:#777; margin-bottom:8px; }
+  .hosp-info .emergency {
+    display:inline-flex; align-items:center; gap:5px;
+    background:#fdecea; color:#c62828; font-size:11.5px; font-weight:600;
+    padding:4px 10px; border-radius:20px;
+  }
+
+  .icu-info { text-align:left; }
+  .icu-info .label { font-size:13px; color:#333; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .icu-info .count { font-size:26px; font-weight:700; }
+  .icu-info .count.high { color:#2e7d32; }
+  .icu-info .count.low { color:#e65100; }
+  .icu-info .count.zero { color:#c62828; }
+  .icu-info .count small { font-size:15px; color:#888; font-weight:500; }
+  .icu-info .sub { font-size:12px; color:#888; margin-top:2px; }
+
+  .spec-info .label { font-size:13px; font-weight:600; color:#333; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .spec-item { display:flex; align-items:center; gap:8px; font-size:13px; margin-bottom:5px; color:#333; }
+  .spec-item .ok { color:#2e7d32; font-weight:700; }
+  .spec-item .no { color:#c62828; font-weight:700; }
+  .spec-item .badge-no {
+    background:#fdecea; color:#c62828; font-size:10.5px; font-weight:600;
+    padding:1px 7px; border-radius:10px; margin-left:4px;
+  }
+
+  .status-box { border-radius:10px; padding:14px; text-align:center; height:100%; }
+  .status-box.good { background:#eaf7ec; }
+  .status-box.warn { background:#fff3e0; }
+  .status-box .check {
+    width:30px; height:30px; border-radius:50%; background:#2e7d32; color:#fff;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:15px;
+  }
+  .status-box.good p { font-size:12.5px; font-weight:600; color:#2e7d32; }
+  .status-box.warn .warn-title { font-size:12.5px; font-weight:700; color:#e65100; margin-bottom:8px; }
+  .status-box.warn button {
+    background:#e65100; color:#fff; border:none; border-radius:6px;
+    padding:8px 14px; font-size:12.5px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; gap:6px; margin:0 auto 8px;
+  }
+  .status-box.warn .note { font-size:11px; color:#888; }
+
+  /* Notify All Bar */
+  .notify-all {
+    background:#fdecea; border-radius:14px; padding:20px 24px;
+    display:flex; justify-content:space-between; align-items:center; margin-top:10px;
+  }
+  .notify-left { display:flex; align-items:center; gap:14px; }
+  .notify-left .bell-icon {
+    width:44px; height:44px; background:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:20px; color:#e02020;
+  }
+  .notify-left h3 { font-size:15px; margin-bottom:3px; }
+  .notify-left p { font-size:12.5px; color:#777; }
+  .notify-right { text-align:right; }
+  .notify-right button {
+    background:#e02020; color:#fff; border:none; border-radius:8px;
+    padding:12px 20px; font-size:14px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; gap:8px; margin-bottom:8px;
+  }
+  .notify-right .confirm { font-size:11.5px; color:#2e7d32; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="icon">🚑</div>
+      <div>
+        <h1>Ambu<span>Care</span></h1>
+        <p>Fast Help. Right Care. Near You.</p>
+      </div>
+    </div>
+    <div class="location-box">
+      <div class="location-info">
+        <div class="pin">📍</div>
+        <div class="location-text">
+          <strong>Location Disabled</strong>
+          <span>Enable location to find nearby hospitals</span>
+        </div>
+      </div>
+      <button class="btn-red">🎯 Enable Location</button>
+    </div>
+  </div>
+
+  <!-- Symptom Search -->
+  <div class="search-card">
+    <div class="search-left">
+      <h2>Tell us your symptoms</h2>
+      <p>Type your symptoms to find the right care</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Type symptoms (e.g. chest pain, breathing difficulty, fever)">
+        <button>Search</button>
+      </div>
+      <div class="popular">
+        <span class="label">Popular examples:</span>
+        <span class="tag">Chest pain</span>
+        <span class="tag">Breathlessness</span>
+        <span class="tag">Severe headache</span>
+        <span class="tag">High fever</span>
+        <span class="tag">Accident injury</span>
+      </div>
+    </div>
+    <div class="search-illustration">🏥🚑</div>
+  </div>
+
+  <!-- Hospitals Section -->
+  <div class="section-title">
+    <h2>🚑 Hospitals Near You</h2>
+    <span class="based-on">Based on: <b>Chest pain, Breathlessness</b> ⓘ</span>
+  </div>
+  <p class="section-sub">Showing hospitals with available ICU beds and specialists based on your symptoms.</p>
+
+  <!-- Hospital 1 -->
+  <div class="hospital-card">
+    <div class="hosp-img"></div>
+    <div class="hosp-info">
+      <h3>City Care Hospital <span class="dist">2.5 km</span></h3>
+      <p class="addr">123, MG Road, Near Central Park, City</p>
+      <span class="emergency">🕐 24x7 Emergency</span>
+    </div>
+    <div class="icu-info">
+      <div class="label">🛏 ICU Beds Available</div>
+      <div class="count high">3 <small>/ 10</small></div>
+      <div class="sub">ICU Beds</div>
+    </div>
+    <div class="spec-info">
+      <div class="label">👥 Available Specialists</div>
+      <div class="spec-item"><span class="ok">✔</span> Cardiologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Pulmonologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Emergency Physician</div>
+    </div>
+    <div class="status-box good">
+      <div class="check">✔</div>
+      <p>All required specialists<br>are available</p>
+    </div>
+  </div>
+
+  <!-- Hospital 2 -->
+  <div class="hospital-card">
+    <div class="hosp-img"></div>
+    <div class="hosp-info">
+      <h3>Life Line Multispeciality <span class="dist">4.1 km</span></h3>
+      <p class="addr">45, South Street, Near Bus Stand, City</p>
+      <span class="emergency">🕐 24x7 Emergency</span>
+    </div>
+    <div class="icu-info">
+      <div class="label">🛏 ICU Beds Available</div>
+      <div class="count low">1 <small>/ 8</small></div>
+      <div class="sub">ICU Beds</div>
+    </div>
+    <div class="spec-info">
+      <div class="label">👥 Available Specialists</div>
+      <div class="spec-item"><span class="ok">✔</span> Cardiologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Neurologist</div>
+      <div class="spec-item"><span class="no">✘</span> Pulmonologist <span class="badge-no">Not Available</span></div>
+    </div>
+    <div class="status-box warn">
+      <div class="warn-title">Pulmonologist<br>Not Available</div>
+      <button>🔔 Notify Hospital</button>
+      <div class="note">We will inform the hospital about this requirement.</div>
+    </div>
+  </div>
+
+  <!-- Hospital 3 -->
+  <div class="hospital-card">
+    <div class="hosp-img"></div>
+    <div class="hosp-info">
+      <h3>Green Valley Hospital <span class="dist">6.3 km</span></h3>
+      <p class="addr">78, Green Valley Road, City</p>
+      <span class="emergency">🕐 24x7 Emergency</span>
+    </div>
+    <div class="icu-info">
+      <div class="label">🛏 ICU Beds Available</div>
+      <div class="count high">5 <small>/ 12</small></div>
+      <div class="sub">ICU Beds</div>
+    </div>
+    <div class="spec-info">
+      <div class="label">👥 Available Specialists</div>
+      <div class="spec-item"><span class="ok">✔</span> Cardiologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Pulmonologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Neurologist</div>
+    </div>
+    <div class="status-box good">
+      <div class="check">✔</div>
+      <p>All required specialists<br>are available</p>
+    </div>
+  </div>
+
+  <!-- Hospital 4 -->
+  <div class="hospital-card">
+    <div class="hosp-img"></div>
+    <div class="hosp-info">
+      <h3>Hope Medical Center <span class="dist">8.7 km</span></h3>
+      <p class="addr">99, Ring Road, City</p>
+      <span class="emergency">🕐 24x7 Emergency</span>
+    </div>
+    <div class="icu-info">
+      <div class="label">🛏 ICU Beds Available</div>
+      <div class="count zero">0 <small>/ 6</small></div>
+      <div class="sub">ICU Beds</div>
+    </div>
+    <div class="spec-info">
+      <div class="label">👥 Available Specialists</div>
+      <div class="spec-item"><span class="ok">✔</span> Cardiologist</div>
+      <div class="spec-item"><span class="ok">✔</span> Neurologist</div>
+      <div class="spec-item"><span class="no">✘</span> Pulmonologist <span class="badge-no">Not Available</span></div>
+    </div>
+    <div class="status-box warn">
+      <div class="warn-title">Pulmonologist<br>Not Available</div>
+      <button>🔔 Notify Hospital</button>
+      <div class="note">We will inform the hospital about this requirement.</div>
+    </div>
+  </div>
+
+  <!-- Notify All Bar -->
+  <div class="notify-all">
+    <div class="notify-left">
+      <div class="bell-icon">🔔</div>
+      <div>
+        <h3>Notify to All Hospitals</h3>
+        <p>We will notify all nearby hospitals about the required specialist<br>if it is not available anywhere.</p>
+      </div>
+    </div>
+    <div class="notify-right">
+      <button>🔔 Notify All Hospitals</button>
+      <div class="confirm">✅ We will contact you once the specialist becomes available.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
+```
+
+Just copy this into a `.html` file and open it in a browser — it's a fully self-contained page (no external dependencies). Let me know if you'd like tweaks to colors, spacing, or interactivity (e.g. making the search bar and buttons functional with JS).
