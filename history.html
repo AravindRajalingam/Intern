@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Appointments</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body { background:#eef0f3; padding:24px; }
+
+  .card {
+    max-width:1180px; margin:0 auto; background:#fff; border-radius:14px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08); padding:26px 30px;
+  }
+
+  .content-header {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:22px; gap:20px; flex-wrap:wrap;
+  }
+
+  .titles { display:flex; align-items:center; gap:14px; }
+  .titles .icon {
+    width:44px; height:44px; border-radius:12px; background:#eaf0fe;
+    display:flex; align-items:center; justify-content:center; font-size:19px; color:#1550c4;
+    flex-shrink:0;
+  }
+  .titles h2 { font-size:19px; color:#111; }
+  .titles p { font-size:13px; color:#888; margin-top:3px; }
+
+  /* TAB HEADER - right aligned */
+  .tab-header {
+    display:flex; gap:6px; background:#f3f4f7; padding:5px;
+    border-radius:10px; flex-shrink:0;
+  }
+  .tab-btn {
+    display:flex; align-items:center; gap:7px; padding:9px 16px;
+    border-radius:8px; font-size:13.5px; font-weight:600; color:#777;
+    cursor:pointer; white-space:nowrap; transition:background 0.15s, color 0.15s;
+    border:none; background:transparent;
+  }
+  .tab-btn .ico { font-size:13px; }
+  .tab-btn .count {
+    font-size:11px; font-weight:700; background:#e2e4ea; color:#888;
+    padding:1px 7px; border-radius:10px;
+  }
+  .tab-btn:hover { color:#1550c4; }
+  .tab-btn.active { background:#1550c4; color:#fff; }
+  .tab-btn.active .count { background:rgba(255,255,255,0.22); color:#fff; }
+
+  .list { display:flex; flex-direction:column; }
+  .appt-row {
+    display:flex; align-items:center; gap:18px; padding:18px 0;
+    border-bottom:1px solid #f0f0f0;
+  }
+  .appt-row:last-child { border-bottom:none; }
+
+  .appt-row img {
+    width:90px; height:66px; border-radius:8px; object-fit:cover;
+    background:linear-gradient(135deg,#cfe0f0,#a9c7e0);
+    flex-shrink:0;
+  }
+
+  .appt-info { flex:1.4; }
+  .appt-info h3 { font-size:15px; color:#111; margin-bottom:4px; }
+  .appt-info .doc { color:#1550c4; font-size:13.5px; font-weight:600; margin-bottom:2px; }
+  .appt-info .spec { font-size:12.5px; color:#777; }
+
+  .appt-datetime { flex:1.4; }
+  .appt-datetime .row { display:flex; align-items:center; gap:8px; font-size:13px; color:#333; margin-bottom:4px; }
+  .appt-datetime .row .ico { color:#1550c4; font-size:13px; }
+  .appt-datetime .sub { font-size:12px; color:#888; margin-left:21px; margin-bottom:4px; }
+
+  .status {
+    padding:6px 16px; border-radius:20px; font-size:12.5px; font-weight:600;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .status.completed { background:#eaf7ec; color:#2e7d32; }
+  .status.upcoming { background:#eaf0fe; color:#1550c4; border:1px solid #c8d8fb; }
+  .status.cancelled { background:#fdecea; color:#c62828; border:1px solid #f6c9c4; }
+
+  .empty-state {
+    text-align:center; padding:60px 20px; color:#999;
+  }
+  .empty-state .ico { font-size:34px; margin-bottom:12px; }
+  .empty-state p { font-size:14px; }
+
+  @media (max-width:700px) {
+    .content-header { flex-direction:column; }
+    .tab-header { width:100%; }
+    .tab-btn { flex:1; justify-content:center; }
+    .appt-row { flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="content-header">
+    <div class="titles">
+      <div class="icon">📅</div>
+      <div>
+        <h2 id="section-title">Upcoming Appointments</h2>
+        <p id="section-sub">Appointments you have scheduled ahead</p>
+      </div>
+    </div>
+
+    <!-- TAB HEADER on the right -->
+    <div class="tab-header">
+      <button class="tab-btn active" data-tab="upcoming">
+        <span class="ico">📅</span> Upcoming <span class="count" id="count-upcoming">0</span>
+      </button>
+      <button class="tab-btn" data-tab="history">
+        <span class="ico">🕘</span> History <span class="count" id="count-history">0</span>
+      </button>
+      <button class="tab-btn" data-tab="cancelled">
+        <span class="ico">✕</span> Cancelled <span class="count" id="count-cancelled">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="list" id="appt-list"></div>
+
+</div>
+
+<script>
+  const appointments = [
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Rajesh Kumar", spec: "Cardiologist",
+      date: "20 May 2025", day: "Tuesday", time: "09:00 AM", status: "upcoming"
+    },
+    {
+      hospital: "Hope Medical Center", doctor: "Dr. Arvind B", spec: "Orthopedic Surgeon",
+      date: "28 May 2025", day: "Wednesday", time: "02:00 PM", status: "upcoming"
+    },
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Rajesh Kumar", spec: "Cardiologist",
+      date: "05 May 2025", day: "Monday", time: "10:30 AM", status: "history"
+    },
+    {
+      hospital: "Green Valley Hospital", doctor: "Dr. Meena S", spec: "Neurologist",
+      date: "15 Apr 2025", day: "Tuesday", time: "11:00 AM", status: "history"
+    },
+    {
+      hospital: "Life Line Multispeciality", doctor: "Dr. Priya Sharma", spec: "Pulmonologist",
+      date: "02 Apr 2025", day: "Wednesday", time: "04:30 PM", status: "history"
+    },
+    {
+      hospital: "City Care Hospital", doctor: "Dr. Priya Sharma", spec: "Pulmonologist",
+      date: "10 May 2025", day: "Saturday", time: "03:00 PM", status: "cancelled"
+    }
+  ];
+
+  const statusMeta = {
+    upcoming:  { label: "Upcoming",  icon: "🕐", class: "upcoming" },
+    history:   { label: "Completed", icon: "✔",  class: "completed" },
+    cancelled: { label: "Cancelled", icon: "✕",  class: "cancelled" }
+  };
+
+  const sectionMeta = {
+    upcoming:  { title: "Upcoming Appointments", sub: "Appointments you have scheduled ahead" },
+    history:   { title: "Appointment History",   sub: "Your past completed appointments" },
+    cancelled: { title: "Cancelled Appointments",sub: "Appointments that were cancelled" }
+  };
+
+  function renderList(tab) {
+    const list = document.getElementById('appt-list');
+    const items = appointments.filter(a => a.status === tab);
+
+    document.getElementById('section-title').textContent = sectionMeta[tab].title;
+    document.getElementById('section-sub').textContent = sectionMeta[tab].sub;
+
+    if (items.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="ico">📭</div>
+          <p>No ${tab} appointments to show.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(a => {
+      const s = statusMeta[a.status];
+      return `
+        <div class="appt-row">
+          <img src="" alt="hospital">
+          <div class="appt-info">
+            <h3>${a.hospital}</h3>
+            <div class="doc">${a.doctor}</div>
+            <div class="spec">${a.spec}</div>
+          </div>
+          <div class="appt-datetime">
+            <div class="row"><span class="ico">📅</span> ${a.date}</div>
+            <div class="sub">${a.day}</div>
+            <div class="row"><span class="ico">🕐</span> ${a.time}</div>
+          </div>
+          <div class="status ${s.class}">${s.icon} ${s.label}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function updateCounts() {
+    ['upcoming','history','cancelled'].forEach(tab => {
+      const n = appointments.filter(a => a.status === tab).length;
+      document.getElementById('count-' + tab).textContent = n;
+    });
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      renderList(item.dataset.tab);
+    });
+  });
+
+  // Initial load: Upcoming shown first
+  updateCounts();
+  renderList('upcoming');
+</script>
+
+</body>
+</html>
