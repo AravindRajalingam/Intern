@@ -1,0 +1,324 @@
+/* =========================================================
+   CURONEX — Emergency Service Page
+   Updated to match CURONEX UI DESIGN SYSTEM v1.0
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root{
+  /* ===== 1. COLOR PALETTE (Blue Theme) ===== */
+  --primary-dark:#0B3D91;      /* Primary / Brand (Navbar) */
+  --primary:#1976D2;           /* Primary Button */
+  --primary-hover:#1565C0;     /* Button Hover */
+  --primary-light:#E3F2FD;     /* Selected / Active Background */
+  --bg:#F8FAFC;                /* Page Background */
+
+  --card-bg:#FFFFFF;
+  --border:#D9E6F5;
+  --input-border:#C9DDF2;
+  --icon-primary-text:#0B3D91;
+  --text-dark:#102A43;         /* Heading Text */
+
+  --body-text:#4B5563;
+  --text-muted:#6B7280;        /* Secondary Text */
+  --link-accent:#1976D2;
+
+  --rating-bg:#E8F4FD;
+  --rating-text:#1976D2;
+
+  --green:#2E7D32;             /* Success */
+  --green-bg:#E8F5E9;
+  --orange:#D32F2F;            /* Error (system has no separate warning color) */
+  --orange-bg:#FFEBEE;
+  --info-bg:#E3F2FD;
+  --info-text:#1976D2;
+
+  --booked-bg:rgba(180,180,180,0.35);
+  --booked-text:#7A7A7A;
+  --selected-slot:#64B5F6;
+  --card-hover-bg:#F2F8FE;
+  --blue:#1976D2;               /* Direction / accent buttons */
+
+  /* ===== 3. BORDER RADIUS ===== */
+  --r-button:14px;
+  --r-card:20px;
+  --r-input:16px;
+  --r-hospital-card:18px;
+  --r-date-card:12px;
+  --r-slot-chip:10px;
+  --r-profile:50%;
+
+  /* ===== 4. SHADOWS ===== */
+  --shadow-default:0 8px 24px rgba(0,0,0,0.08);
+  --shadow-hover:0 12px 30px rgba(0,0,0,0.12);
+
+  /* ===== 10. LAYOUT DIMENSIONS ===== */
+  --navbar-height:80px;
+  --left-sidebar-width:260px;
+  --right-sidebar-width:300px;
+  --main-padding:32px;
+  --container-max-width:1440px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+body { background:var(--bg); color:var(--body-text); font-weight:400; font-size:16px; }
+
+/* ===== NAVBAR ===== */
+.navbar{
+  height:var(--navbar-height);
+  background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+  color:#fff; padding:0 var(--main-padding);
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+}
+.navbar .brand{ display:flex; align-items:center; gap:12px; }
+.navbar .brand .logo{
+  width:38px; height:38px; background:rgba(255,255,255,0.15); border-radius:var(--r-input);
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+  font-weight:700;
+}
+.navbar .brand h1{ font-size:32px; font-weight:700; }
+.navbar .brand p{ font-size:13px; font-weight:400; color:rgba(255,255,255,0.85); margin-top:1px; }
+
+.navbar .nav-right{ display:flex; align-items:center; gap:28px; }
+.navbar .nav-links{ display:flex; gap:24px; }
+.navbar .nav-links a{ color:#fff; text-decoration:none; font-size:18px; font-weight:500; opacity:0.92; }
+.navbar .nav-links a:hover{ opacity:1; }
+
+.navbar .icon-btn{
+  position:relative; width:36px; height:36px; border-radius:var(--r-profile);
+  background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center;
+  font-size:15px; cursor:pointer;
+}
+.navbar .icon-btn .badge{
+  position:absolute; top:-4px; right:-4px; background:var(--orange); color:#fff;
+  font-size:10px; font-weight:700; width:16px; height:16px; border-radius:var(--r-profile);
+  display:flex; align-items:center; justify-content:center;
+}
+.navbar .user{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+.navbar .user .avatar{
+  width:34px; height:34px; border-radius:var(--r-profile); background:#fff; color:var(--primary);
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;
+}
+.navbar .user span{ font-size:16px; font-weight:600; }
+
+/* ===== LAYOUT ===== */
+.layout{
+  display:grid;
+  grid-template-columns:var(--left-sidebar-width) 1fr var(--right-sidebar-width);
+  gap:20px;
+  max-width:var(--container-max-width);
+  margin:0 auto;
+  padding:var(--main-padding);
+  align-items:start;
+}
+
+/* ===== LEFT SIDEBAR ===== */
+.sidebar{ display:flex; flex-direction:column; gap:20px; }
+.side-nav{
+  background:var(--card-bg); border-radius:var(--r-card); padding:16px;
+  box-shadow:var(--shadow-default);
+}
+.side-item{
+  display:flex; align-items:center; gap:12px; padding:12px 16px;
+  border-radius:var(--r-input); cursor:pointer; margin-bottom:8px; color:var(--text-dark);
+}
+.side-item .ico{
+  width:34px; height:34px; border-radius:var(--r-slot-chip); background:var(--primary-light);
+  display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--icon-primary-text);
+  flex-shrink:0;
+}
+.side-item span{ font-size:18px; font-weight:500; line-height:1.3; }
+.side-item:hover{ background:var(--card-hover-bg); }
+.side-item.active{ background:var(--primary-light); box-shadow:var(--shadow-default); }
+.side-item.active .ico{ background:var(--primary); color:#fff; }
+.side-item.active span{ color:var(--primary); font-weight:600; }
+
+.help-card{
+  background:linear-gradient(160deg,var(--primary-light),#F7FAFE);
+  border-radius:var(--r-card); padding:20px; position:relative; overflow:hidden;
+}
+.help-card .ico{
+  width:38px; height:38px; border-radius:var(--r-profile); background:#fff; color:var(--primary);
+  display:flex; align-items:center; justify-content:center; font-size:16px; margin-bottom:12px;
+}
+.help-card h4{ font-size:16px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.help-card .link{ color:var(--link-accent); font-size:14px; font-weight:600; margin-bottom:8px; display:block; }
+.help-card p{ font-size:13px; font-weight:400; color:var(--text-muted); }
+
+/* ===== MAIN CONTENT ===== */
+.main-col{ display:flex; flex-direction:column; gap:20px; }
+
+.content-title-bar h2{ font-size:40px; font-weight:700; color:var(--text-dark); }
+.content-title-bar p{ font-size:16px; font-weight:400; color:var(--text-muted); margin-top:4px; }
+
+.location-banner{
+  background:var(--card-bg); border-radius:var(--r-card); padding:20px;
+  display:flex; justify-content:space-between; align-items:center;
+  box-shadow:var(--shadow-default);
+}
+.location-banner:hover{ box-shadow:var(--shadow-hover); }
+.location-info{ display:flex; align-items:center; gap:12px; }
+.location-info .pin{
+  width:36px; height:36px; background:var(--primary-light); color:var(--primary); border-radius:var(--r-profile);
+  display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;
+}
+.location-text strong{ display:block; font-size:16px; font-weight:600; color:var(--primary); }
+.location-text span{ font-size:13px; font-weight:400; color:var(--text-muted); }
+.btn-red{
+  background:var(--primary); color:#fff; border:none; border-radius:var(--r-button);
+  padding:12px 24px; font-size:16px; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; gap:8px;
+}
+.btn-red:hover{ background:var(--primary-hover); }
+
+/* Symptom Search Card */
+.search-card{
+  background:var(--card-bg); border-radius:var(--r-card); padding:24px;
+  box-shadow:var(--shadow-default);
+}
+.search-card:hover{ box-shadow:var(--shadow-hover); }
+.search-card h2{ font-size:28px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.search-card > p{ font-size:14px; font-weight:400; color:var(--text-muted); margin-bottom:16px; }
+
+.search-bar{ display:flex; gap:12px; }
+.search-bar input{
+  flex:1; padding:12px 16px; border:1px solid var(--input-border); border-radius:var(--r-input);
+  font-size:14px; font-weight:400; outline:none; color:var(--body-text);
+}
+.search-bar input:focus{ border-color:var(--primary); }
+.search-bar button{
+  background:var(--primary); color:#fff; border:none; border-radius:var(--r-button);
+  padding:12px 24px; font-size:16px; font-weight:600; cursor:pointer;
+}
+.search-bar button:hover{ background:var(--primary-hover); }
+
+.popular{ margin-top:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.popular span.label{ font-size:14px; font-weight:600; color:var(--text-dark); }
+.tag{
+  background:var(--info-bg); border-radius:20px; padding:6px 16px;
+  font-size:13px; font-weight:400; color:var(--info-text); cursor:pointer;
+}
+.tag:hover{ background:var(--primary-light); color:var(--primary); }
+
+/* Hospitals Section */
+.section-title{
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;
+}
+.section-title h2{ font-size:28px; font-weight:600; color:var(--text-dark); }
+.section-title .based-on{ font-size:14px; font-weight:400; color:var(--body-text); }
+.section-title .based-on b{ color:var(--primary); font-weight:600; }
+.section-sub{ font-size:14px; font-weight:400; color:var(--text-muted); margin-bottom:8px; }
+
+.hospital-card{
+  background:var(--card-bg); border-radius:var(--r-hospital-card); padding:20px; position:relative;
+  display:grid; grid-template-columns: 110px 1.4fr 1.2fr 1.3fr 1fr;
+  gap:16px; align-items:center; margin-bottom:16px;
+  box-shadow:var(--shadow-default);
+  transition:box-shadow 0.2s ease, background 0.2s ease;
+}
+.hospital-card:hover{ box-shadow:var(--shadow-hover); background:var(--card-hover-bg); }
+.hosp-img{
+  width:100px; height:80px; border-radius:var(--r-date-card);
+  background:linear-gradient(135deg,#CFE0F0,#A9C7E0);
+}
+
+.hosp-info h3{ font-size:22px; font-weight:600; color:var(--text-dark); margin-bottom:6px; }
+.hosp-info .dist{
+  background:var(--green-bg); color:var(--green); font-size:13px; font-weight:600;
+  padding:2px 10px; border-radius:20px; margin-left:8px;
+}
+.hosp-info .addr{ font-size:14px; font-weight:400; color:var(--body-text); margin-bottom:8px; }
+.hosp-info .emergency{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--orange-bg); color:var(--orange); font-size:13px; font-weight:600;
+  padding:4px 12px; border-radius:20px;
+}
+
+.icu-info{ text-align:left; }
+.icu-info .label{ font-size:14px; font-weight:600; color:var(--text-dark); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.icu-info .count{ font-size:28px; font-weight:700; }
+.icu-info .count.high{ color:var(--green); }
+.icu-info .count.low{ color:var(--orange); }
+.icu-info .count.zero{ color:var(--orange); }
+.icu-info .count small{ font-size:15px; font-weight:400; color:var(--text-muted); }
+.icu-info .sub{ font-size:13px; font-weight:400; color:var(--text-muted); margin-top:2px; }
+
+.spec-info .label{ font-size:14px; font-weight:600; color:var(--text-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.spec-item{ display:flex; align-items:center; gap:8px; font-size:14px; font-weight:400; margin-bottom:6px; color:var(--body-text); }
+.spec-item .ok{ color:var(--green); font-weight:700; }
+.spec-item .no{ color:var(--orange); font-weight:700; }
+.spec-item .badge-no{
+  background:var(--orange-bg); color:var(--orange); font-size:12px; font-weight:600;
+  padding:1px 8px; border-radius:20px; margin-left:4px;
+}
+
+.status-box{ border-radius:var(--r-slot-chip); padding:16px; text-align:center; height:100%; }
+.status-box.good{ background:var(--green-bg); }
+.status-box.warn{ background:var(--orange-bg); }
+.status-box .check{
+  width:30px; height:30px; border-radius:var(--r-profile); background:var(--green); color:#fff;
+  display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:15px;
+}
+.status-box.good p{ font-size:13px; font-weight:600; color:var(--green); }
+.status-box.warn .warn-title{ font-size:13px; font-weight:600; color:var(--orange); margin-bottom:8px; }
+.status-box.warn button{
+  background:var(--orange); color:#fff; border:none; border-radius:var(--r-button);
+  padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; gap:6px; margin:0 auto 8px;
+}
+.status-box.warn .note{ font-size:12px; font-weight:400; color:var(--text-muted); }
+
+.direction-btn{
+  margin-top:8px;
+  background:var(--blue); color:#fff; border:none;
+  padding:8px 16px; border-radius:var(--r-button); font-size:13px; font-weight:600;
+  cursor:pointer; transition:0.2s ease;
+}
+.direction-btn:hover{ background:var(--primary-hover); transform:scale(1.04); }
+
+/* Notify All Bar */
+.notify-all{
+  background:var(--primary-light); border-radius:var(--r-card); padding:24px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.notify-left{ display:flex; align-items:center; gap:16px; }
+.notify-left .bell-icon{
+  width:44px; height:44px; background:#fff; border-radius:var(--r-profile);
+  display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--primary);
+}
+.notify-left h3{ font-size:16px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.notify-left p{ font-size:13px; font-weight:400; color:var(--text-muted); }
+.notify-right{ text-align:right; }
+.notify-right button{
+  background:var(--orange); color:#fff; border:none; border-radius:var(--r-button);
+  padding:12px 24px; font-size:16px; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; gap:8px; margin-bottom:8px;
+}
+.notify-right button:hover{ background:#B71C1C; }
+.notify-right .confirm{ font-size:12px; font-weight:400; color:var(--green); }
+
+/* ===== RIGHT SIDEBAR ===== */
+.right-sidebar{ display:flex; flex-direction:column; gap:16px; }
+.quick-card{
+  background:var(--card-bg); border-radius:var(--r-card); padding:16px; display:flex; align-items:center; gap:14px;
+  box-shadow:var(--shadow-default); cursor:pointer; border:2px solid transparent;
+  transition:border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.quick-card:hover{ border-color:var(--primary-light); box-shadow:var(--shadow-hover); }
+.quick-card .ico{
+  width:42px; height:42px; border-radius:var(--r-profile); background:var(--primary-light); color:var(--primary);
+  display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;
+}
+.quick-card h4{ font-size:16px; font-weight:600; color:var(--text-dark); margin-bottom:2px; display:flex; align-items:center; gap:6px; }
+.quick-card p{ font-size:13px; font-weight:400; color:var(--text-muted); }
+.quick-card .arrow{ margin-left:auto; color:var(--text-muted); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1100px){
+  .layout{ grid-template-columns:1fr; }
+  .navbar .nav-links{ display:none; }
+}
+@media (max-width:820px){
+  .hospital-card{ grid-template-columns:1fr; }
+}
