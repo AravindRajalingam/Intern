@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Curonex | Pharmacy Administrator</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<style>
+  :root{
+    --primary-dark:#0B3D91; --primary:#1976D2; --primary-hover:#1565C0; --primary-light:#E3F2FD;
+    --bg:#F8FAFC; --card-bg:#FFFFFF; --border:#D9E6F5; --input-border:#C9DDF2;
+    --text-dark:#102A43; --body-text:#4B5563; --text-muted:#6B7280;
+    --green:#2E7D32; --green-bg:#E8F5E9; --red:#D32F2F; --red-bg:#FFEBEE;
+    --orange:#B26A00; --orange-bg:#FFF3E0;
+    --rating-bg:#E8F4FD; --rating-text:#1976D2;
+    --shadow-default:0 8px 24px rgba(0,0,0,0.08); --shadow-hover:0 12px 30px rgba(0,0,0,0.12);
+    --r-button:14px; --r-card:20px; --r-input:16px; --r-hospital-card:18px; --r-date-card:12px; --r-slot-chip:10px; --r-profile:50%;
+    --navbar-height:80px; --left-sidebar-width:260px; --right-sidebar-width:280px; --main-padding:32px; --container-max-width:1500px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+  body { background:var(--bg); color:var(--body-text); font-size:16px; }
+  ul{ list-style:none; }
+
+  /* NAVBAR */
+  .navbar{
+    height:var(--navbar-height); background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+    color:#fff; padding:0 var(--main-padding); display:flex; align-items:center; justify-content:space-between;
+    position:sticky; top:0; z-index:100;
+  }
+  .navbar .brand{ display:flex; align-items:center; gap:12px; }
+  .navbar .brand .logo{ width:38px; height:38px; background:rgba(255,255,255,0.15); border-radius:var(--r-input); display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .navbar .brand h1{ font-size:24px; font-weight:700; }
+  .navbar .brand p{ font-size:12px; color:rgba(255,255,255,0.85); }
+  .navbar .nav-right{ display:flex; align-items:center; gap:24px; }
+  .navbar .icon-btn{ position:relative; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; }
+  .navbar .icon-btn .badge{ position:absolute; top:-4px; right:-4px; background:var(--red); color:#fff; font-size:10px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .navbar .user{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .navbar .user .avatar{ width:34px; height:34px; border-radius:50%; background:#fff; color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .navbar .user span{ font-size:15px; font-weight:600; }
+
+  /* LAYOUT */
+  .layout{ display:grid; grid-template-columns:var(--left-sidebar-width) 1fr var(--right-sidebar-width); gap:20px; max-width:var(--container-max-width); margin:0 auto; padding:var(--main-padding); align-items:start; }
+
+  /* LEFT SIDEBAR */
+  .sidebar{ display:flex; flex-direction:column; gap:16px; position:sticky; top:104px; }
+  .side-nav{ background:var(--card-bg); border-radius:var(--r-card); padding:14px; box-shadow:var(--shadow-default); }
+  .side-item{ display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--r-input); cursor:pointer; margin-bottom:4px; color:var(--text-dark); }
+  .side-item .ico{ width:32px; height:32px; border-radius:var(--r-slot-chip); background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--primary); flex-shrink:0; }
+  .side-item span{ font-size:14px; font-weight:500; }
+  .side-item:hover{ background:#F2F8FE; }
+  .side-item.active{ background:var(--primary-light); }
+  .side-item.active .ico{ background:var(--primary); color:#fff; }
+  .side-item.active span{ color:var(--primary); font-weight:600; }
+
+  /* MAIN CONTENT */
+  .main-card{ background:var(--card-bg); border-radius:var(--r-card); box-shadow:var(--shadow-default); padding:28px 32px; min-height:600px; }
+  .page-section{ display:none; animation:fadeIn 0.25s ease; }
+  .page-section.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .page-title h2{ font-size:26px; font-weight:600; color:var(--text-dark); }
+  .page-title p{ font-size:14px; color:var(--text-muted); margin-top:4px; margin-bottom:24px; }
+
+  /* Dashboard stat cards */
+  .stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px; }
+  .stat-card{ background:var(--primary-light); border-radius:var(--r-date-card); padding:18px; }
+  .stat-card .num{ font-size:26px; font-weight:700; color:var(--primary-dark); }
+  .stat-card .label{ font-size:13px; color:var(--body-text); margin-top:4px; }
+  .stat-card.warn{ background:var(--orange-bg); } .stat-card.warn .num{ color:var(--orange); }
+  .stat-card.danger{ background:var(--red-bg); } .stat-card.danger .num{ color:var(--red); }
+  .stat-card.success{ background:var(--green-bg); } .stat-card.success .num{ color:var(--green); }
+
+  .section-heading{ font-size:18px; font-weight:600; color:var(--text-dark); margin:24px 0 12px; }
+
+  /* Tables */
+  table{ width:100%; border-collapse:collapse; margin-bottom:8px; }
+  thead th{ text-align:left; font-size:12.5px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.03em; padding:10px 12px; border-bottom:1px solid var(--border); }
+  tbody td{ font-size:14px; color:var(--body-text); padding:14px 12px; border-bottom:1px solid var(--border); }
+  tbody tr:hover{ background:#F9FBFF; }
+
+  .badge{ display:inline-flex; align-items:center; gap:4px; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+  .badge-success{ background:var(--green-bg); color:var(--green); }
+  .badge-warn{ background:var(--orange-bg); color:var(--orange); }
+  .badge-error{ background:var(--red-bg); color:var(--red); }
+  .badge-info{ background:var(--rating-bg); color:var(--rating-text); }
+
+  .row-actions{ display:flex; gap:8px; }
+  .btn-sm{ padding:6px 12px; font-size:12.5px; font-weight:600; border-radius:8px; cursor:pointer; border:none; }
+  .btn-sm.view{ background:var(--primary-light); color:var(--primary); }
+  .btn-sm.accept{ background:var(--green); color:#fff; }
+  .btn-sm.reject{ background:var(--red); color:#fff; }
+  .btn-sm.edit{ background:var(--card-bg); color:var(--text-dark); border:1px solid var(--input-border); }
+
+  .btn-primary{ background:var(--primary); color:#fff; border:none; border-radius:var(--r-button); padding:10px 20px; font-size:14px; font-weight:600; cursor:pointer; }
+  .btn-primary:hover{ background:var(--primary-hover); }
+  .btn-secondary{ background:#fff; border:1px solid var(--input-border); color:var(--text-dark); border-radius:var(--r-button); padding:10px 20px; font-size:14px; font-weight:600; cursor:pointer; }
+
+  .toolbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .toolbar input, .toolbar select{ padding:10px 14px; border:1px solid var(--input-border); border-radius:var(--r-input); font-size:13.5px; outline:none; }
+  .toolbar input:focus, .toolbar select:focus{ border-color:var(--primary); }
+  .filter-tabs{ display:flex; gap:6px; background:var(--bg); padding:5px; border-radius:var(--r-input); }
+  .filter-tab{ padding:8px 16px; border-radius:var(--r-slot-chip); font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; border:none; background:transparent; }
+  .filter-tab.active{ background:var(--primary); color:#fff; }
+
+  /* Prescription verification card */
+  .presc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .presc-card{ border:1px solid var(--border); border-radius:var(--r-date-card); padding:18px; }
+  .presc-card h4{ font-size:14px; font-weight:600; color:var(--text-dark); margin-bottom:10px; }
+  .presc-card p{ font-size:13.5px; color:var(--body-text); margin-bottom:4px; }
+  .presc-img{ width:100%; height:220px; border-radius:var(--r-date-card); background:linear-gradient(135deg,#cfe0f0,#a9c7e0); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; }
+  .med-list-item{ display:flex; justify-content:space-between; font-size:13.5px; padding:8px 0; border-bottom:1px solid var(--border); }
+
+  /* Profile */
+  .profile-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group{ margin-bottom:16px; }
+  .form-group label{ display:block; font-size:12.5px; font-weight:600; color:var(--text-muted); margin-bottom:6px; }
+  .form-group input, .form-group textarea{ width:100%; padding:12px 14px; border:1px solid var(--input-border); border-radius:var(--r-input); font-size:14px; outline:none; }
+  .form-group input:focus, .form-group textarea:focus{ border-color:var(--primary); }
+
+  /* Field messages */
+  .field-msg{ display:none; align-items:center; gap:6px; font-size:13px; font-weight:500; padding:10px 14px; border-radius:var(--r-slot-chip); margin:14px 0; }
+  .field-msg.show{ display:flex; animation:fadeIn 0.2s ease; }
+  .field-msg.success{ background:var(--green-bg); color:var(--green); border:1px solid #b7e0bd; }
+  .field-msg.error{ background:var(--red-bg); color:var(--red); border:1px solid #f3b8b3; }
+
+  /* RIGHT SIDEBAR */
+  .right-sidebar{ display:flex; flex-direction:column; gap:14px; }
+  .quick-card{ background:var(--card-bg); border-radius:var(--r-card); padding:16px; box-shadow:var(--shadow-default); }
+  .quick-card h4{ font-size:14px; font-weight:600; color:var(--text-dark); margin-bottom:10px; }
+  .quick-row{ display:flex; justify-content:space-between; font-size:13px; color:var(--body-text); padding:6px 0; }
+  .quick-row b{ color:var(--text-dark); }
+
+  @media (max-width:1150px){ .layout{ grid-template-columns:1fr; } .presc-grid{ grid-template-columns:1fr; } .stat-grid{ grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="brand">
+    <div class="logo">💊</div>
+    <div><h1>Curonex</h1><p>Pharmacy Administrator</p></div>
+  </div>
+  <div class="nav-right">
+    <div class="icon-btn">🔔<span class="badge" id="notif-count">4</span></div>
+    <div class="user"><div class="avatar">P</div><span>Prime Pharmacy</span><span style="font-size:11px;">▾</span></div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+    <div class="side-nav" id="side-nav">
+      <div class="side-item active" data-page="dashboard"><div class="ico">📊</div><span>Pharmacy Dashboard</span></div>
+      <div class="side-item" data-page="orders"><div class="ico">📦</div><span>Medicine Orders</span></div>
+      <div class="side-item" data-page="prescriptions"><div class="ico">📝</div><span>Prescription Verification</span></div>
+      <div class="side-item" data-page="inventory"><div class="ico">🏷️</div><span>Medicine Inventory</span></div>
+      <div class="side-item" data-page="delivery"><div class="ico">🚚</div><span>Delivery Management</span></div>
+      <div class="side-item" data-page="history"><div class="ico">🕘</div><span>Order History</span></div>
+      <div class="side-item" data-page="reports"><div class="ico">📈</div><span>Reports &amp; Analytics</span></div>
+      <div class="side-item" data-page="profile"><div class="ico">🏥</div><span>Pharmacy Profile</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-card">
+
+    <!-- 1. DASHBOARD -->
+    <section class="page-section active" id="page-dashboard">
+      <div class="page-title"><h2>Pharmacy Dashboard</h2><p>Overview of today's pharmacy operations.</p></div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num">18</div><div class="label">New Medicine Orders</div></div>
+        <div class="stat-card warn"><div class="num">7</div><div class="label">Pending Verifications</div></div>
+        <div class="stat-card"><div class="num">11</div><div class="label">Orders Processing</div></div>
+        <div class="stat-card danger"><div class="num">5</div><div class="label">Low Stock Medicines</div></div>
+        <div class="stat-card success"><div class="num">23</div><div class="label">Today's Deliveries</div></div>
+        <div class="stat-card"><div class="num">₹42,300</div><div class="label">Today's Revenue</div></div>
+      </div>
+      <div class="section-heading">Recent Orders</div>
+      <table>
+        <thead><tr><th>Order ID</th><th>Patient</th><th>Medicines</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>#ORD1042</td><td>Rahul Menon</td><td>Paracetamol, Azithromycin</td><td><span class="badge badge-warn">Processing</span></td></tr>
+          <tr><td>#ORD1041</td><td>Divya S</td><td>Metformin 500mg</td><td><span class="badge badge-success">Ready</span></td></tr>
+          <tr><td>#ORD1040</td><td>Kaushik T</td><td>Amoxicillin, Vitamin D3</td><td><span class="badge badge-info">New</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 2. MEDICINE ORDERS -->
+    <section class="page-section" id="page-orders">
+      <div class="page-title"><h2>Medicine Orders</h2><p>Manage and process incoming medicine orders.</p></div>
+      <div class="toolbar">
+        <div class="filter-tabs">
+          <button class="filter-tab active">New</button>
+          <button class="filter-tab">Processing</button>
+          <button class="filter-tab">Ready</button>
+          <button class="filter-tab">Completed</button>
+          <button class="filter-tab">Cancelled</button>
+        </div>
+        <input type="text" placeholder="Search order ID or patient...">
+      </div>
+      <table>
+        <thead><tr><th>Order ID</th><th>Patient</th><th>Items</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="orders-table">
+          <tr><td>#ORD1040</td><td>Kaushik T</td><td>Amoxicillin 500mg x2</td><td>₹340</td><td><span class="badge badge-info">New</span></td>
+            <td class="row-actions"><button class="btn-sm view">View</button><button class="btn-sm accept" onclick="orderAction(this,'Accepted')">Accept</button><button class="btn-sm reject" onclick="orderAction(this,'Rejected')">Reject</button></td></tr>
+          <tr><td>#ORD1039</td><td>Anitha R</td><td>Cetirizine, Cough Syrup</td><td>₹210</td><td><span class="badge badge-info">New</span></td>
+            <td class="row-actions"><button class="btn-sm view">View</button><button class="btn-sm accept" onclick="orderAction(this,'Accepted')">Accept</button><button class="btn-sm reject" onclick="orderAction(this,'Rejected')">Reject</button></td></tr>
+          <tr><td>#ORD1038</td><td>Suresh Babu</td><td>Insulin Pen, Syringes</td><td>₹890</td><td><span class="badge badge-info">New</span></td>
+            <td class="row-actions"><button class="btn-sm view">View</button><button class="btn-sm accept" onclick="orderAction(this,'Accepted')">Accept</button><button class="btn-sm reject" onclick="orderAction(this,'Rejected')">Reject</button></td></tr>
+        </tbody>
+      </table>
+      <div class="field-msg" id="orders-msg"></div>
+    </section>
+
+    <!-- 3. PRESCRIPTION VERIFICATION -->
+    <section class="page-section" id="page-prescriptions">
+      <div class="page-title"><h2>Prescription Verification</h2><p>Review digital prescriptions before approving orders.</p></div>
+      <div class="presc-grid">
+        <div class="presc-card">
+          <h4>Digital Prescription</h4>
+          <div class="presc-img">📄 Prescription Image Preview</div>
+        </div>
+        <div>
+          <div class="presc-card" style="margin-bottom:16px;">
+            <h4>Patient Details</h4>
+            <p><b>Name:</b> Kaushik T</p><p><b>Age/Gender:</b> 29 / Male</p><p><b>Phone:</b> +91 98765 43210</p>
+          </div>
+          <div class="presc-card" style="margin-bottom:16px;">
+            <h4>Doctor Details</h4>
+            <p><b>Name:</b> Dr. Rajesh Kumar</p><p><b>Specialization:</b> Cardiologist</p><p><b>Reg. No:</b> TN/MED/48213</p>
+          </div>
+          <div class="presc-card">
+            <h4>Medicine List</h4>
+            <div class="med-list-item"><span>Amoxicillin 500mg</span><span>2 x 10 tabs</span></div>
+            <div class="med-list-item"><span>Vitamin D3</span><span>1 x 30 tabs</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:20px;">
+        <button class="btn-primary" onclick="prescAction('Verified')">Verify Prescription</button>
+        <button class="btn-primary" style="background:var(--green);" onclick="prescAction('Approved')">Approve Order</button>
+        <button class="btn-secondary" onclick="prescAction('Clarification Requested', 'error')">Request Clarification</button>
+        <button class="btn-secondary" style="color:var(--red); border-color:var(--red);" onclick="prescAction('Rejected', 'error')">Reject Order</button>
+      </div>
+      <div class="field-msg" id="presc-msg"></div>
+    </section>
+
+    <!-- 4. MEDICINE INVENTORY -->
+    <section class="page-section" id="page-inventory">
+      <div class="page-title"><h2>Medicine Inventory</h2><p>Manage stock levels, batches, and expiry tracking.</p></div>
+      <div class="toolbar">
+        <input type="text" placeholder="Search medicine...">
+        <button class="btn-primary" onclick="showMsg('inventory-msg','New medicine added to inventory.','success')">+ Add Medicine</button>
+      </div>
+      <table>
+        <thead><tr><th>Medicine</th><th>Stock Qty</th><th>Expiry Date</th><th>Batch No.</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>Paracetamol 500mg</td><td>420</td><td>12 Mar 2027</td><td>PB-2291</td><td><span class="badge badge-success">In Stock</span></td>
+            <td class="row-actions"><button class="btn-sm edit">Update</button><button class="btn-sm reject" onclick="showMsg('inventory-msg','Paracetamol marked out of stock.','error')">Out of Stock</button></td></tr>
+          <tr><td>Amoxicillin 500mg</td><td>18</td><td>05 Jan 2027</td><td>AB-1187</td><td><span class="badge badge-warn">Low Stock</span></td>
+            <td class="row-actions"><button class="btn-sm edit">Update</button><button class="btn-sm reject">Delete</button></td></tr>
+          <tr><td>Insulin Pen</td><td>0</td><td>20 Aug 2026</td><td>IN-0032</td><td><span class="badge badge-error">Out of Stock</span></td>
+            <td class="row-actions"><button class="btn-sm edit">Update</button><button class="btn-sm reject">Delete</button></td></tr>
+        </tbody>
+      </table>
+      <div class="field-msg" id="inventory-msg"></div>
+    </section>
+
+    <!-- 5. MEDICINE AVAILABILITY (folded into inventory search view) -->
+    <section class="page-section" id="page-availability">
+      <div class="page-title"><h2>Medicine Availability</h2><p>Check real-time stock and reserved quantities.</p></div>
+      <div class="toolbar"><input type="text" placeholder="Search medicine to check availability..."></div>
+      <table>
+        <thead><tr><th>Medicine</th><th>Available Qty</th><th>Reserved Qty</th><th>Generic Alternative</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>Metformin 500mg</td><td>310</td><td>40</td><td>Glycomet 500mg</td><td class="row-actions"><button class="btn-sm view">View</button><button class="btn-sm edit">Update</button></td></tr>
+          <tr><td>Cetirizine 10mg</td><td>150</td><td>12</td><td>Zyrtec 10mg</td><td class="row-actions"><button class="btn-sm view">View</button><button class="btn-sm edit">Update</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 6. DELIVERY MANAGEMENT -->
+    <section class="page-section" id="page-delivery">
+      <div class="page-title"><h2>Delivery Management</h2><p>Assign and track medicine deliveries.</p></div>
+      <table>
+        <thead><tr><th>Order ID</th><th>Patient</th><th>Delivery Partner</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>#ORD1035</td><td>Divya S</td><td>Unassigned</td><td><span class="badge badge-warn">Ready</span></td>
+            <td class="row-actions"><button class="btn-sm accept" onclick="showMsg('delivery-msg','Delivery partner assigned to #ORD1035.','success')">Assign Partner</button></td></tr>
+          <tr><td>#ORD1031</td><td>Rahul Menon</td><td>Ravi Kumar (Speedy Logistics)</td><td><span class="badge badge-info">Out for Delivery</span></td>
+            <td class="row-actions"><button class="btn-sm accept" onclick="showMsg('delivery-msg','#ORD1031 marked as delivered.','success')">Mark Delivered</button></td></tr>
+          <tr><td>#ORD1028</td><td>Anitha R</td><td>Mohan D (QuickDrop)</td><td><span class="badge badge-success">Delivered</span></td>
+            <td class="row-actions"><button class="btn-sm view">View</button></td></tr>
+        </tbody>
+      </table>
+      <div class="field-msg" id="delivery-msg"></div>
+    </section>
+
+    <!-- 7. ORDER HISTORY -->
+    <section class="page-section" id="page-history">
+      <div class="page-title"><h2>Order History</h2><p>Search and review completed, cancelled, and returned orders.</p></div>
+      <div class="toolbar">
+        <input type="text" placeholder="Search by Order ID or Patient...">
+        <input type="date">
+      </div>
+      <table>
+        <thead><tr><th>Order ID</th><th>Patient</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>#ORD0998</td><td>Meena S</td><td>28 Jun 2026</td><td>₹560</td><td><span class="badge badge-success">Completed</span></td></tr>
+          <tr><td>#ORD0991</td><td>Arvind B</td><td>25 Jun 2026</td><td>₹120</td><td><span class="badge badge-error">Cancelled</span></td></tr>
+          <tr><td>#ORD0987</td><td>Priya Sharma</td><td>21 Jun 2026</td><td>₹340</td><td><span class="badge badge-warn">Returned</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8. REPORTS & ANALYTICS -->
+    <section class="page-section" id="page-reports">
+      <div class="page-title"><h2>Reports &amp; Analytics</h2><p>Track performance and identify trends.</p></div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num">142</div><div class="label">Orders This Month</div></div>
+        <div class="stat-card success"><div class="num">96%</div><div class="label">Delivery Success Rate</div></div>
+        <div class="stat-card warn"><div class="num">9</div><div class="label">Low Stock Items</div></div>
+      </div>
+      <div class="section-heading">Frequently Ordered Medicines</div>
+      <table>
+        <thead><tr><th>Medicine</th><th>Orders This Month</th><th>Trend</th></tr></thead>
+        <tbody>
+          <tr><td>Paracetamol 500mg</td><td>212</td><td><span class="badge badge-success">↑ 12%</span></td></tr>
+          <tr><td>Cetirizine 10mg</td><td>134</td><td><span class="badge badge-success">↑ 5%</span></td></tr>
+          <tr><td>Amoxicillin 500mg</td><td>98</td><td><span class="badge badge-error">↓ 3%</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 9. PHARMACY PROFILE -->
+    <section class="page-section" id="page-profile">
+      <div class="page-title"><h2>Pharmacy Profile</h2><p>Manage your pharmacy's information and license details.</p></div>
+      <div class="profile-grid">
+        <div class="form-group"><label>Pharmacy Name</label><input type="text" value="Prime Pharmacy"></div>
+        <div class="form-group"><label>License Number</label><input type="text" value="PH-TN-88213"></div>
+        <div class="form-group"><label>Contact Number</label><input type="text" value="+91 44 2345 6789"></div>
+        <div class="form-group"><label>Operating Hours</label><input type="text" value="8:00 AM - 10:00 PM"></div>
+      </div>
+      <div class="form-group"><label>Address</label><textarea rows="3">45, Anna Salai, Chennai, Tamil Nadu - 600002</textarea></div>
+      <button class="btn-primary" onclick="showMsg('profile-msg','Pharmacy profile updated successfully.','success')">Update Profile</button>
+      <div class="field-msg" id="profile-msg"></div>
+    </section>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+    <div class="quick-card">
+      <h4>Today's Snapshot</h4>
+      <div class="quick-row"><span>New Orders</span><b>18</b></div>
+      <div class="quick-row"><span>Pending Verifications</span><b>7</b></div>
+      <div class="quick-row"><span>Ready for Delivery</span><b>9</b></div>
+      <div class="quick-row"><span>Low Stock Alerts</span><b style="color:var(--red);">5</b></div>
+    </div>
+    <div class="quick-card">
+      <h4>Notifications</h4>
+      <div class="quick-row"><span>🔔 Prescription request pending</span></div>
+      <div class="quick-row"><span>📦 3 new orders received</span></div>
+      <div class="quick-row"><span>⚠️ Insulin Pen out of stock</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------- Sidebar navigation / section switching ---------- */
+  const sideItems = document.querySelectorAll('.side-item');
+  const sections = document.querySelectorAll('.page-section');
+
+  sideItems.forEach(item => {
+    item.addEventListener('click', () => {
+      sideItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+
+      const target = item.dataset.page;
+      sections.forEach(sec => sec.classList.remove('active'));
+      const targetSection = document.getElementById('page-' + target);
+      if (targetSection) targetSection.classList.add('active');
+    });
+  });
+
+  /* ---------- Filter tabs (Medicine Orders page) ---------- */
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const parent = tab.closest('.filter-tabs');
+      parent.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  /* ---------- Inline message helper ---------- */
+  window.showMsg = function (id, text, type = 'success', duration = 3500) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = (type === 'success' ? '✔ ' : '✕ ') + text;
+    el.className = `field-msg show ${type}`;
+    clearTimeout(el._t);
+    if (duration) el._t = setTimeout(() => el.classList.remove('show'), duration);
+  };
+
+  /* ---------- Order accept/reject actions ---------- */
+  window.orderAction = function (btn, action) {
+    const row = btn.closest('tr');
+    const statusCell = row.querySelector('td:nth-child(5) .badge');
+    if (action === 'Accepted') {
+      statusCell.textContent = 'Processing';
+      statusCell.className = 'badge badge-warn';
+      showMsg('orders-msg', `Order ${row.children[0].textContent} accepted and moved to processing.`, 'success');
+    } else {
+      statusCell.textContent = 'Rejected';
+      statusCell.className = 'badge badge-error';
+      showMsg('orders-msg', `Order ${row.children[0].textContent} has been rejected.`, 'error');
+    }
+  };
+
+  /* ---------- Prescription verification actions ---------- */
+  window.prescAction = function (label, type = 'success') {
+    showMsg('presc-msg', `Prescription ${label.toLowerCase()}.`, type);
+  };
+
+  /* ---------- Notification badge demo ---------- */
+  const notifBtn = document.querySelector('.icon-btn');
+  if (notifBtn) {
+    notifBtn.addEventListener('click', () => {
+      const badge = document.getElementById('notif-count');
+      if (badge) badge.textContent = '0';
+    });
+  }
+
+});
+</script>
+
+</body>
+</html>
